@@ -185,10 +185,6 @@ const dummyUsers = [
 ];
 
 async function seed() {
-  if(process.env.NODE_ENV !== 'development'){
-    await prisma.$disconnect()
-    return ;
-  }
   // Clear existing data (order matters due to relations)
   await prisma.passwordResetToken.deleteMany();
   await prisma.meal.deleteMany();
