@@ -48,8 +48,8 @@ const dummyMeals = [
       5. Serve:
          Enjoy this creamy curry with rice or bread.
     `,
-    creator: 'Atanda Timothy',
-    creator_email: 'ibikunle@gmail.com',
+    creator: 'Timothy kunle',
+    creator_email: 'atandatimothy26@gmail.com',
   },
   {
     title: 'Party Jollof & Fried Chiken',
