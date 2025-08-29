@@ -71,7 +71,7 @@ const dummyMeals = [
          Enjoy these dumplings hot, with a dipping sauce of your choice.
     `,
     creator: 'Atanda Ibikunle',
-    creator_email: 'marriamA@gmail.com',
+    creator_email: 'ibikunle@gmail.com',
   },
   {
     title: 'Classic Chiken & Ice Creams',
@@ -140,7 +140,7 @@ const dummyMeals = [
       Serve hot with a slice of lemon and a side of potato salad or greens.
  `,
     creator: 'Atanda Ibikunle',
-    creator_email: 'marriamA@gmail.com',
+    creator_email: 'ibikunle@gmail.com',
   },
   {
     title: 'Pando With Okro',
@@ -185,34 +185,29 @@ const dummyUsers = [
 ];
 
 async function seed() {
-  // Clear existing data (order matters due to relations)
-  await prisma.passwordResetToken.deleteMany();
-  await prisma.meal.deleteMany();
-  await prisma.user.deleteMany();
+  try {
+    // Seed meals only if empty
+    const mealCount = await prisma.meal.count();
+    if (mealCount === 0) {
+      await prisma.meal.createMany({ data: dummyMeals });
+    }
 
-  // Seed meals
-  for (const meal of dummyMeals) {
-    await prisma.meal.create({ data: meal });
+    // Seed users only if empty
+    const userCount = await prisma.user.count();
+    if (userCount === 0) {
+      for (const user of dummyUsers) {
+        const hashedPassword = await bcrypt.hash(user.password, 10);
+        await prisma.user.create({
+          data: {
+            name: user.name,
+            email: user.email,
+            password: hashedPassword,
+          },
+        });
+      }
+    }
+  } finally {
+    await prisma.$disconnect();
   }
-
-  // Seed users (with hashed passwords)
-  for (const user of dummyUsers) {
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-    await prisma.user.create({
-      data: {
-        name: user.name,
-        email: user.email,
-        password: hashedPassword,
-      },
-    });
-  }
-
-  console.log('Seeding complete ');
-  await prisma.$disconnect();
 }
-
-seed().catch((e) => {
-  console.error(e);
-  prisma.$disconnect();
-  process.exit(1);
-});
+seed().catch(() => process.exit(1));
