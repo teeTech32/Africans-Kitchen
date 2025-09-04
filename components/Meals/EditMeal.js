@@ -11,6 +11,7 @@ export default  function EditMeal({meal, setIsedited}){
   const [pendind, setPending] = useState(false)
   const [alertMessage, setAlertMessage] = useState(false)
   const [pickedEditImage, setPickedEditImage] = useState(null)
+  const [imageAlert, setImageAlert] = useState(false)
   const [inputData, setInputData] = useState({
    creator: meal.creator,
    creator_email: meal.creator_email,
@@ -43,6 +44,21 @@ export default  function EditMeal({meal, setIsedited}){
       setPickedEditImage(null) 
       return; 
     }
+     // I checked if the prospective image file size is not greater than 3mb to prevent serverAction resources over consumed
+    if(file.size >= 3 * 1024 * 1024){
+      setImageAlert(true)
+
+      window.imageAlertTimeout = setTimeout(() => {
+      setImageAlert(false);
+      }, 5000);
+
+      // Clear any existing timeout to prevent overlapping
+       if (window.imageAlertTimeout) {
+         clearTimeout(window.imageAlertTimeout);
+        }
+      return 
+    }
+    setImageAlert(false)
     const fileReader = new FileReader();
       fileReader.readAsDataURL(file);
       fileReader.onload = ()=>{
@@ -152,9 +168,12 @@ export default  function EditMeal({meal, setIsedited}){
                   <button disabled={pendind}  type="submit" className={`z-10 text-white font-semibold text-xs md:text-sm xl:text-lg bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 p-1 rounded-md cursor-pointer absolute ${alertMessage ? 'bottom-12' : 'bottom-0'} right-5 hover:text-red-500 hover:transition-1000 duration-500 hover:scale-105`}>{pendind ? 'Editing...' : 'Edit Meal'}</button>
                 </p>
                 {alertMessage && <p className="bg-red-600 p-2 mx-10 md:mx-20 rounded-md text-white text-center text-sm md:text-lg xl:text-xl font-bold">Bad connection, check your connections !</p>}
-              </form>   
+              </form> 
+              {imageAlert && <main className="flex flex-col border-2 border-red-700 ml-5 mr-25 lg:mr-30 my-2 rounded-md">
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-red-600 to-orange-600 font-extrabold text-xs md:text-lg xl:text-xl text-center mt-2">Error!!!</p>
+                <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-red-600 to-orange-600 font-extrabold  text-xs md:text-lg xl:text-xl text-center mt-2 mb-3 mx-5">An image size of 3mb or greater than 3mb is not allowed !...</h1>
+                </main> }  
             </main>
           </div>
         </>
 }
-
