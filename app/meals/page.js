@@ -17,7 +17,7 @@ export default function MealsPage(){
  
   return<>
           <header className="m-5">
-            <h1 className="text-white font-extrabold text-xl md:text-3xl xl:text-5xl mx-5 mt-35 lg:mt-55 md:mb-4 xl:mb-6 mb-2" data-aos='fade-right'
+            <h1 className="text-white font-extrabold text-xl md:text-3xl xl:text-5xl mx-5 mt-35 lg:mt-60 md:mb-4 xl:mb-6 mb-2" data-aos='fade-right'
                                            data-aos-offset='200'
                                            data-aos-delay='50'
                                            data-aos-duration='1000'
