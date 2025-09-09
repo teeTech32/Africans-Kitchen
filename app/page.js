@@ -30,7 +30,7 @@ return <div>
                                     data-aos-delay='50'
                                     data-aos-duration='1000'
                                     data-aos-easing='ease-in-out'>
-                <h1 className=" mx-10 mb-3 md:mt-30 lg:mt-40 font-bold text-sm md:text-xl  xl:text-2xl  text-transparent bg-gradient-to-r from-red-500 via-yellow-300 to-red-500 bg-clip-text transition-all duration-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110">
+                <h1 className=" mx-10 mb-3 md:mt-30 lg:mt-50 font-bold text-sm md:text-xl  xl:text-2xl  text-transparent bg-gradient-to-r from-red-500 via-yellow-300 to-red-500 bg-clip-text transition-all duration-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110">
                   AFRICANS&apos; FOODS FOR AFRICAN FOODIES
                 </h1>
                 <p className="text-sm md:text-lg xl:text-xl font-semibold md:font-bold text-white mx-5 my-3">
