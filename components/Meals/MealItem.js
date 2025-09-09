@@ -18,15 +18,15 @@ export default function MealItem({title, slug, creator, summary, image}){
             </div>
           </header>
           <div className="flex justify-center">
-            <div className="text-white bg-amber-500 relative pb-10 w-80 md:w-70 rounded-b-md">
-              <h2 className="text-xs font-stretch-50% md:text-sm mt-2 ml-2">
+            <div className="bg-amber-500 relative pb-10 w-80 md:w-70 rounded-b-md">
+              <h2 className="text-white text-xs font-stretch-50% md:text-sm mt-2 ml-2">
                 {title}
               </h2>
-              <p className="text-xs font-bold  md:text-sm mt- ml-2 font">
-                by: {creator}
+              <p className="text-white text-xs font-bold  md:text-sm mt- ml-2 font">
+                by: <span className="text-red-700">{creator}</span> 
               </p>
-              <p className="text-xs font-stretch-50%  md:text-sm mt-2 mx-2">{summary}</p>
-              <div className="bg-gradient-to-r from-yellow-300 to-red-700 p-1 rounded-md text-xs font-bold  md:text-sm mt-2 ml-2 mr-2 absolute bottom-2 right-2 hover:text-amber-300 hover:transition-1000 hover:scale-105 duration-500">
+              <p className="text-white text-xs font-stretch-50%  md:text-sm mt-2 mx-2">{summary}</p>
+              <div className="text-white bg-gradient-to-r from-yellow-300 to-red-700 p-1 rounded-md text-xs font-bold  md:text-sm mt-2 ml-2 mr-2 absolute bottom-2 right-2 hover:text-amber-300 hover:transition-1000 hover:scale-105 duration-500">
                 <Link href={`/meals/${slug}`} className="w-20 relative z-10">
                   Veiw Details
                 </Link>
