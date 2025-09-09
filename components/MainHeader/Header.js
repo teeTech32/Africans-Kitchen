@@ -33,11 +33,7 @@ export default function Header(){
                 <p className="absolute top-4 md:top-8  xl:top-12 left-16 md:left-24  xl:left-30 text-sm md:text-xl  xl:text-2xl text-white hover:text-transparent hover:bg-gradient-to-r hover:from-yellow-300 hover:via-red-600 hover:to-orange-400 hover:bg-clip-text transition-all duration-500 drop-shadow-lg hover:drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110 font-extrabold align-middle xl:mx-2">AFRICANS&apos; KITCHEN</p>
               </Link>
             </div>
-            <div className={` flex-col lg:flex-row absolute right-4 xl:right-4 top-5 xl:top-7 lg:flex  ${istoggle ? 'block' : 'hidden'} bg-amber-400 rounded-b-md lg:bg-transparent`} data-aos='zoom-out'
-                                                                                                                                                                                      data-aos-offset='200'
-                                                                                                                                                                                      data-aos-delay='200'
-                                                                                                                                                                                      data-aos-duration='1000'
-                                                                                                                                                                                      data-aos-easing='ease-in-out'>
+            <div className={` flex-col lg:flex-row absolute right-4 xl:right-4 top-5 xl:top-7 lg:flex  ${istoggle ? 'block' : 'hidden'} bg-amber-400 rounded-b-md lg:bg-transparent`}>
               <NavLink href={'/meals'} className="my-2">
                 Browse Meals
               </NavLink>
