@@ -9,7 +9,7 @@ export default function Footer(){
   return ( 
     <div  className="text-red-700 bg-[url('/images/pattern.jpg')]  bg-cover bg-center w-screen">
       <div className='container'>
-        <div className='grid md:grid-cols-3 pb-44 pt-5' data-aos='zoom-in'
+        <div className='grid md:grid-cols-3 pb-44 pt-5' data-aos='zoom-out'
                                                         data-aos-offset='200'
                                                         data-aos-delay='200'
                                                         data-aos-duration='1000'
