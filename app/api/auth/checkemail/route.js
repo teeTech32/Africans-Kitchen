@@ -31,8 +31,8 @@ export async function POST(req) {
         expires_at
       }
     })
-
-    await sendResetEmail(email, token)
+    
+    await sendResetEmail(email, token, user)
 
     return NextResponse.json(
       { message: "Email sent, check your inbox to proceed" },
