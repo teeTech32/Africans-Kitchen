@@ -55,7 +55,7 @@ export default function Signup(){
             </p>}
             <div className="md:h-[410px] h-[400px] md:w-[610px]  md:flex-row md:flex rounded-md bg-amber-600 -translate-y-1/2 -translate-x-1/2 top-1/2  left-1/2 absolute">
               <div className="flex justify-center md:m-2">
-                <Image src={image} alt="SingUp Image" width={500} height={700} className="h-[399px] w-[300px] object-cover hidden md:block rounded-l-lg "/>
+                <Image src={image} alt="SingUp Image" priority width={500} height={700} className="h-[399px] w-[300px] object-cover hidden md:block rounded-l-lg "/>
                   <div className="flex justify-center">
                   <p className="hidden md:block text-white text-sm font-extrabold absolute top-2 right-55">Welcome</p>
                     <div className="md:h-[370px] h-[400px] w-[300px]  bg-transparent md:rounded-l-none rounded-lg bg-gradient-to-tr from-orange-400 via-red-700 to-yellow-300 md:mt-7">
