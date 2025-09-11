@@ -5,7 +5,6 @@ import { deleteMeal } from "@/lib/meals";
 import { IoCheckmarkDoneSharp } from "react-icons/io5"; 
 import { FaXmark } from "react-icons/fa6";
 import { useRouter } from 'next/navigation'
-import {revalidatePage} from '@/lib/revalidatepage'
 
 
 export default function DeleteMeal({setIsdeleted, params}){
@@ -24,8 +23,6 @@ export default function DeleteMeal({setIsdeleted, params}){
           router.push('/meals')
         },5000)
       }else{
-      router.refresh()
-      await revalidatePage();
       router.push('/meals')
       }
     })
