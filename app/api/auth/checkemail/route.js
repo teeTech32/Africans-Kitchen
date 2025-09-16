@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client"
+import prisma from "@/lib/prisma"
 import { v4 as uuidv4 } from "uuid"
 import { NextResponse } from "next/server"
 import { sendResetEmail } from "@/lib/email"
-
-const prisma = new PrismaClient()
 
 export async function POST(req) {
   try {
