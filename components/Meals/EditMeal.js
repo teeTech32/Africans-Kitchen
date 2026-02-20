@@ -6,6 +6,7 @@ import { TiDelete } from "react-icons/ti";
 import { editMeal } from "@/lib/meals";
 import { useRouter } from "next/navigation";
 import {revalidatePage} from '@/lib/revalidatepage'
+import { api } from "@/lib/api";
 
 export default  function EditMeal({meal, setIsedited}){
   const [pendind, setPending] = useState(false)
@@ -13,8 +14,8 @@ export default  function EditMeal({meal, setIsedited}){
   const [pickedEditImage, setPickedEditImage] = useState(null)
   const [imageAlert, setImageAlert] = useState(false)
   const [inputData, setInputData] = useState({
-   creator: meal.creator,
-   creator_email: meal.creator_email,
+   userName: meal.userName,
+   userEmail: meal.userEmail,
    title: meal.title,
    summary: meal.summary,
    instructions: meal.instructions,
@@ -23,7 +24,7 @@ export default  function EditMeal({meal, setIsedited}){
   const pickEditImage = useRef()
   const router = useRouter()
 
-  const {creator, creator_email, title, summary, instructions, image} = inputData;
+  const {userName, userEmail, title, summary, instructions, image} = inputData;
 
   const instructionsText = instructions
                           .replace(/<br\s*\/?>/g, '\n') // Replace all <br/> with newlines
@@ -73,10 +74,11 @@ export default  function EditMeal({meal, setIsedited}){
   async function handleSubmit(event){
     setPending(true)
     event.preventDefault()
+    await api.get('/api/auth/accesstoken');
     const formData = new FormData();
     formData.append('id', meal.id);
-    formData.append('creator', creator);
-    formData.append('creator_email', creator_email);
+    formData.append('userName', userName);
+    formData.append('userEmail', userEmail);
     formData.append('title', title);
     formData.append('summary', summary);
     formData.append('instructions', instructions);
@@ -85,7 +87,6 @@ export default  function EditMeal({meal, setIsedited}){
     }else{
       formData.set('image', image)
     }
-
     const result = await editMeal(formData);
     if(!result.success){
       setPending(false)
@@ -115,11 +116,11 @@ export default  function EditMeal({meal, setIsedited}){
                 <div className="flex flex-col md:flex-row">
                   <p className="mx-5  my-2">
                     <label htmlFor="Name" className="text-gray-400 text-xs md:text-sm xl:text-lg font-semibold">YOUR NAME</label>
-                    <input type="text" name="name" id="name" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm" value={creator} onChange={handleOnchange}/>
+                    <input type="text" name="userName" id="userName" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm" readOnly value={userName} onChange={handleOnchange}/>
                   </p>
                   <p className="mx-5 my-2">
                     <label htmlFor="Email" className="text-gray-400 text-xs md:text-sm xl:text-lg font-semibold">YOUR EMAIL</label>
-                    <input type="email"  name="email" id="email" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm" value={creator_email} onChange={handleOnchange}/>
+                    <input type="email"  name="userEmail" id="userEmail" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm" readOnly value={userEmail} onChange={handleOnchange}/>
                   </p>
                 </div>
                 <p className="mx-5 my-2 flex flex-col">

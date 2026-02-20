@@ -8,10 +8,10 @@ import DeleteMeal from "./DeleteMeal";
 import EditMeal from "./EditMeal";
 import Link from "next/link";
 
-export default function MealReturnValue({meal, imageUrl, mealInstructions, email }){
+export default function MealReturnValue({meal, imageUrl, mealInstructions, userId }){
   const [isdeleted, setIsdeleted] = useState(false)
   const [isedited, setIsedited] = useState(false)
-  const para = meal
+  const para = meal.id
   
   return<>
     {isedited ? <EditMeal meal={meal} setIsedited={setIsedited}/> : <>
@@ -25,7 +25,7 @@ export default function MealReturnValue({meal, imageUrl, mealInstructions, email
         <div className="md:ml-5 mx-10 my-2">
           <div className="inline-flex gap-8 md:mt-35 lg:mt-45">
             <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-red-600 to-orange-600 font-extrabold text-xl md:text-2xl xl:text-3xl  ">{meal.title}</h1>
-            {email === meal.creator_email ? 
+            {userId === meal.userId ? 
              <div className="inline-flex mx-2">
              <div className="inline-flex mr-2 cursor-pointer text-white hover:text-red-600 drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  hover:scale-110 border border-red-500 px-2 rounded-md focus:outline-none focus:ring-1 focus:ring-red-500 duration-200 hover:animate-pulse relative z-10" onClick={()=>setIsdeleted(true)}>
                <button type="button" className="text-xs md:text-sm font-light cursor-pointer">Delete</button>
@@ -38,7 +38,7 @@ export default function MealReturnValue({meal, imageUrl, mealInstructions, email
            </div> : ''}
           </div>
           <p className="text-white font-bold text-sm md:text-lg xl:text-xl" >
-            by: <a href={`mailto:${meal.creator_email}`}>{meal.creator}</a>
+            by: <a href={`mailto:${meal.userEmail}`}>{meal.userName}</a>
           </p>
           <p className="text-white font-light text-xs md:text-sm xl:text-lg mt-3">{meal.summary}</p>
         </div>
@@ -50,6 +50,6 @@ export default function MealReturnValue({meal, imageUrl, mealInstructions, email
         }}></p> 
       </main>
     </>}
-    {isdeleted && <DeleteMeal setIsdeleted={setIsdeleted} params={para}/>}
+    {isdeleted && <DeleteMeal setIsdeleted={setIsdeleted} id={para}/>}
 </> 
 }

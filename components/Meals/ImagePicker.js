@@ -18,7 +18,6 @@ export default function ImagePicker({label, name, isRequired, pickedImage, setPi
       setPickedImage(null)
       return;
     }
-     // I checked if the image file size is not greater than 3mb to prevent serverAction resources over consumed
     if(file.size >= 3 * 1024 * 1024){
       setImageAlert(true)
 
@@ -26,7 +25,6 @@ export default function ImagePicker({label, name, isRequired, pickedImage, setPi
       setImageAlert(false);
       }, 5000);
 
-      // Clear any existing timeout to prevent overlapping
        if (window.imageAlertTimeout) {
          clearTimeout(window.imageAlertTimeout);
         }

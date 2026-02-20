@@ -1,7 +1,9 @@
+
 import { Suspense } from "react"
-import Link from "next/link"
 import MealGrid from "@/components/Meals/MealGrid"
 import { getMeals } from "@/lib/meals"
+import Link from "next/link"
+import ShareForm from "@/components/Meals/ShareForm"
 
 export const metadata = {
   title: 'Delicious various meals',
@@ -37,9 +39,7 @@ export default function MealsPage(){
               data-aos-delay='400'
               data-aos-duration='1000'
               data-aos-easing='ease-in-out' className="relative z-10">
-              <Link href={'/meals/share'} className="w-52 xl:w-64 mx-5 p-1  cursor-pointer bg-gradient-to-r from-amber-400 to-red-700 text-white text-xs md:text-sm xl:text-lg font-semibold rounded-md relative z-10 ">
-                 Share Your Favorite Recipe
-              </Link>
+            <ShareForm/>
             </div> 
           </header>
           <Suspense fallback={<div className="flex justify-center">

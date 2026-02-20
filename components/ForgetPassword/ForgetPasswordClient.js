@@ -7,6 +7,7 @@ import { useSearchParams, useRouter} from "next/navigation";
 import { TiDelete } from "react-icons/ti";
 import { FaEye, FaEyeSlash } from "react-icons/fa6"
 
+
 export default function ForgetPasswordClient(){
   const [isPending, setIsPending] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -114,9 +115,8 @@ export default function ForgetPasswordClient(){
                                 {visible ? <FaEyeSlash/> : <FaEye/>}
                               </p> 
                             </div>
-                            
                             <p className="text-center  mt-15 mb-3">
-                              <button type="submit" disabled={isPending} className='w-32 text-white font-semibold text-xs  bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 p-2 rounded-md cursor-pointer hover:text-red-500 hover:transition-1000 duration-500 hover:scale-105'>{isPending ? 'Resetting...' : 'Reset Password'}</button>
+                              <button type="submit" disabled={isPending} className='w-32 text-black font-extrabold text-xs  bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 p-2 rounded-md cursor-pointer hover:text-white hover:transition-1000 duration-500 hover:scale-105'>{isPending ? 'Resetting...' : 'Reset Password'}</button>
                             </p>
                          </form> 
                        </div>

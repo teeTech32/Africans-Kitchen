@@ -1,11 +1,17 @@
+"use client"
 import { useState } from "react";
 import Image from "next/image"
 import Link from "next/link"
 import { GiLoveHowl } from "react-icons/gi";
+import { api } from "@/lib/api";
 
 
-export default function MealItem({title, slug, creator, summary, image}){
+export default function MealItem({title, slug, userName, summary, image}){
   const [isLiked, setIsLiked] = useState(false)
+
+  const veiwMeal = async()=>{
+    await api.get('/api/auth/accesstoken')
+  }
 
   return<article className="hover:animate-pulse duration-1000" data-aos='fade-up'
                                                                data-aos-offset='200'
@@ -23,11 +29,11 @@ export default function MealItem({title, slug, creator, summary, image}){
                 {title}
               </h2>
               <p className="text-white text-xs font-bold  md:text-sm mt- ml-2 font">
-                by: <span className="text-red-700">{creator}</span> 
+                by: <span className="text-red-700">{userName}</span> 
               </p>
               <p className="text-white text-xs font-stretch-50%  md:text-sm mt-2 mx-2">{summary}</p>
               <div className="text-white bg-gradient-to-r from-yellow-300 to-red-700 p-1 rounded-md text-xs font-bold  md:text-sm mt-2 ml-2 mr-2 absolute bottom-2 right-2 hover:text-amber-300 hover:transition-1000 hover:scale-105 duration-500">
-                <Link href={`/meals/${slug}`} className="w-20 relative z-10">
+                <Link href={`/meals/${slug}`} onClick={veiwMeal} className="w-20 relative z-10">
                   Veiw Details
                 </Link>
               </div>

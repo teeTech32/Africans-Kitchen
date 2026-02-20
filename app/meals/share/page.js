@@ -1,26 +1,68 @@
 "use client"
 
-import { useActionState, useEffect, useState } from "react"
+import { startTransition, useActionState, useEffect, useState } from "react"
 import ImagePicker from "@/components/Meals/ImagePicker"
 import { sharemealData } from "@/lib/actions"
 import { TiDelete } from "react-icons/ti";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
+import { getUser } from "@/components/Meals/ShareForm";
 
 export default function ShareMeals(){
-// this manages the responses and state of the form component before and after the server-action-function was trigger.The useActionState() hook, plays the major role here by standing in-between the two states.
   const [state, formAction, isPending] = useActionState(sharemealData, {message:null});
   const [visibleMessage, setVisibleMessage]= useState('')
   const [loading, setLoading] = useState(true)
   const [pickedImage, setPickedImage] = useState(null)
+  const [user, setUser] = useState(null)
   const [formInputData, setFormInputData] = useState({
-      name: '',
-      email: '',
       title: '',
       summary: '',
       instructions:'',
     })
+  const [lastFormData, setLastFormData] = useState(null);
+ 
+
   const router = useRouter()
+
+useEffect(()=>{
+  const fetchUser = async()=>{
+    try{
+      const response = await getUser();
+      setUser(response)
+    }catch(error){
+      router.push('/authusers/LogIn');
+      return
+    }finally{
+      setLoading(false)
+    }
+  }
+  fetchUser();
+},[router]);
+
+const handledSubmitForm = (formData)=>{
+  setLastFormData(formData);
+  startTransition(()=>{
+    formAction(formData);
+  })
+}
+
+useEffect(()=>{
+  if(state?.error === "Unauthorized User" && lastFormData){
+    (async()=>{
+      try{
+        // Siliently refresh the token
+        await api.post('/api/auth/refreshtoken');
+        // Re-dispatch the server action
+        startTransition(()=>{
+          formAction(lastFormData);
+        })
+      }catch(error){
+         router.push('/authusers/LogIn')
+      }
+    })()
+  }
+}, [state, lastFormData, formAction, router])
   
 useEffect(() => {
   const timeout = state.message ? setTimeout(() => {
@@ -36,8 +78,6 @@ useEffect(() => {
     }
   } else {
     setFormInputData({
-      name: '',
-      email: '',
       title: '',
       summary: '',
       instructions:'',
@@ -49,20 +89,9 @@ useEffect(() => {
   };
 }, [state.message]);
 
-  useEffect(()=>{
-    setLoading(true)
-    fetch('/api/me/profile')
-      .then(res => res.json())
-      .then(data => {
-        if(!data || data.error){
-          router.push('/authusers/SignUp')
-        }else{
-          setLoading(false)
-        }
-      })
-  },[router]);
-
-  const {name, email, title, summary, instructions} = formInputData
+  const {title, summary, instructions} = formInputData
+  const name = user?.name || ""
+  const email = user?.email || ""
   
   function handleChange(e){
     setFormInputData({...formInputData, [e.target.id]: e.target.value})
@@ -83,15 +112,15 @@ useEffect(() => {
             <p className="text-center text-white text-lg md:text-xl xl:text-2xl font-bold mb-10 md:mt-5">Or any other meal you feel needs sharing !</p>
           </header>
           <main className="relative mx-10 mb-30">
-            <form action={formAction} >
+            <form action={handledSubmitForm} >
               <div className="flex flex-col md:flex-row">
                 <p className="mx-5  my-2">
                   <label htmlFor="Name" className="text-gray-400 text-xs md:text-sm xl:text-lg font-semibold">YOUR NAME</label>
-                  <input type="text" required name="name" id="name" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm relative z-10" placeholder="Use your SignUp Name for accessibility" value={name} onChange={handleChange} />
+                  <input type="text" name="userName" id="userName" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm" placeholder="Use your SignUp Name for accessibility" value={name} onChange={handleChange} readOnly />
                 </p>
                 <p className="mx-5 my-2">
                   <label htmlFor="Email" className="text-gray-400 text-xs md:text-sm xl:text-lg font-semibold">YOUR EMAIL</label>
-                  <input type="email" required name="email" id="email" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm relative z-10" placeholder="Use your SignUp Email for accessibility" value={email} onChange={handleChange} />
+                  <input type="email" name="userEmail" id="userEmail" className="w-full p-2 bg-gray-900 rounded-sm text-white text-xs md:text-sm" placeholder="Use your SignUp Email for accessibility" value={email} onChange={handleChange} readOnly/>
                 </p>
               </div>
               <p className="mx-5 my-2 flex flex-col">

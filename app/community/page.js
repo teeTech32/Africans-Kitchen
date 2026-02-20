@@ -8,23 +8,18 @@ import communityIcon from '@/assets/icons/communityIcon.png'
 import community from '@/assets/icons/community.jpg'
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { api } from "@/lib/api"
 
 export default function Community(){
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
    useEffect(()=>{
-    setLoading(true)
-    fetch('/api/me/profile')
-      .then(res => res.json())
-      .then(data => {
-        if(!data || data.error){
-          router.push('/authusers/SignUp')
-        }else{
-          setLoading(false)
-        }
-      })
-  },[router]);
+    const timeOut = setTimeout(()=>{
+        setLoading(false)
+      },5000)
+    return ()=> clearTimeout(timeOut)
+},[router]);
   
 return <>
   {loading ? <div className="flex justify-center">

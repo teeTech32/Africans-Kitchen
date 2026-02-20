@@ -84,6 +84,7 @@ export default function Footer(){
           </div>
         </div>
       </div>
+      <a className='flex justify-center' href="https://www.flaticon.com/free-animated-icons/email" title="email animated icons">Email animated icons created by Freepik - Flaticon</a>
     </div>
   )
 }

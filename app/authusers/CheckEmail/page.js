@@ -10,22 +10,20 @@ export default function   CheckEmail(){
   const [checkEmailAlert, setCheckEmailAlert] = useState('')
   const [emailData, setEmailData] = useState('')
   const router = useRouter()
+
   useEffect(() => {
-  if (!state.message) return;
-
-  setCheckEmailAlert(state.message);
-
-  const timeout = setTimeout(() => {
-    setCheckEmailAlert('');
-    if (state.message === "Email sent, check your inbox to proceed") {
-      setEmailData('');
-      redirect('/');
-    }
-  }, 5000);
-
-  return () => clearTimeout(timeout);
-}, [state.message]);
-
+    if (!state.message) return;
+    setCheckEmailAlert(state.message);
+    const timeout = setTimeout(() => {
+      setCheckEmailAlert('');
+      if (state.message === "Email sent, check your inbox to proceed") {
+        setEmailData('');
+        redirect('/');
+      }
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [state.message]);
+  
    return<div className="fixed h-full w-screen bg-black/75  z-50 top-0  left-0 backdrop-blur-sm" data-aos='fade-up'
    data-aos-offset='200'
    data-aos-delay='200'
@@ -48,7 +46,7 @@ export default function   CheckEmail(){
                       <input type="email"  placeholder="userName@gmail.com" required name="email" id="email" className="w-full p-2 bg-gray-950 rounded-sm text-white text-xs" value={emailData} onChange={(e)=>setEmailData(e.target.value)}/>
                     </p>
                     <p className="text-center  mt-8 mb-3">
-                      <button  type="submit" disabled={isPending} className='w-32 text-white font-semibold text-xs  bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 p-2 rounded-md cursor-pointer hover:text-red-500 hover:transition-1000 duration-500 hover:scale-105'>{isPending ? 'Checking...' : 'Check'}</button>
+                      <button  type="submit" disabled={isPending} className='w-32 text-black font-extrabold text-xs  bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 p-2 rounded-md cursor-pointer hover:text-white hover:transition-1000 duration-500 hover:scale-105'>{isPending ? 'Checking...' : 'Check'}</button>
                     </p>
                   </form> 
                 </div>

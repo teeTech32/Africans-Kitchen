@@ -11,15 +11,20 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
 import { useEffect } from "react";
+import { api } from "@/lib/api";
 
 
 export default function Home(){
   useEffect(()=>{
-  AOS.init({
-    duration: 1000,
-    once: true
-  })
-},[])
+    AOS.init({
+      duration: 1000,
+      once: true
+    })
+  },[])
+
+  async function handledCommunity(){
+   await api.get('/api/auth/accesstoken')
+  }
 
 return <div>
           <header className="flex flex-col  md:flex-row md:gap-2 xl:gap-4 ">
@@ -42,7 +47,7 @@ return <div>
               data-aos-delay='1000'
               data-aos-duration='1000'
               data-aos-easing='ease-in-out'>
-                <Link href={'/community'} className="m-2 btn cursor-pointer text-transparent hover:text-white bg-gradient-to-r from-yellow-300  to-red-500 bg-clip-text  drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110 border border-gray-500 bg-transparent px-2 py-1 rounded-md  focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200 ">Join the community</Link>
+                <Link href={'/community'} className="m-2 btn cursor-pointer text-transparent hover:text-white bg-gradient-to-r from-yellow-300  to-red-500 bg-clip-text  drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110 border border-gray-500 bg-transparent px-2 py-1 rounded-md  focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200 " onClick={handledCommunity}>Join the community</Link>
                 <Link href={'/meals'} className="m-2 btn cursor-pointer text-white bg-gradient-to-r from-red-600  to-yellow-300 hover:text-slate-800  transition-all duration-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5  p-1 rounded-md">Explore Meals</Link>
               </div>
             </div>

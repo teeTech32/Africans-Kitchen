@@ -3,8 +3,27 @@ import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
+const dummyUsers = [
+  {
+    name: 'Atanda Marriam',
+    email: 'marriamA@gmail.com',
+    password: 'marriam@3',
+  },
+  {
+    name: 'Atanda Ibikunle',
+    email: 'ibikunle@gmail.com',
+    password: 'ibi#kunle',
+  },
+  {
+    name: 'Timothy kunle',
+    email: 'atandatimothy26@gmail.com',
+    password: 'kunle',
+  },
+];
 const dummyMeals = [
   {
+    userName: 'Timothy kunle',
+    userEmail: 'atandatimothy26@gmail.com',
     title: 'Assorted Vegetable Soup',
     slug: 'assorted-vegetable-soup',
     image: 'food3.jpeg',
@@ -23,10 +42,10 @@ const dummyMeals = [
       4. Serve:
          Complete the assembly with the top bun and serve hot.
     `,
-    creator: 'Timothy kunle',
-    creator_email: 'atandatimothy26@gmail.com',
   },
   {
+    userName: 'Atanda Ibikunle',
+    userEmail: 'ibikunle@gmail.com',
     title: 'Spicy Snacks',
     slug: 'spicy-curry',
     image: 'food5.jpeg',
@@ -47,11 +66,11 @@ const dummyMeals = [
 
       5. Serve:
          Enjoy this creamy curry with rice or bread.
-    `,
-    creator: 'Timothy kunle',
-    creator_email: 'atandatimothy26@gmail.com',
+    `, 
   },
   {
+    userName: 'Atanda Marriam',
+    userEmail: 'marriamA@gmail.com',
     title: 'Party Jollof & Fried Chiken',
     slug: 'party-jollof',
     image: 'food7.jpeg',
@@ -70,10 +89,10 @@ const dummyMeals = [
       4. Serve:
          Enjoy these dumplings hot, with a dipping sauce of your choice.
     `,
-    creator: 'Atanda Ibikunle',
-    creator_email: 'ibikunle@gmail.com',
   },
   {
+    userName: 'Atanda Ibikunle',
+    userEmail: 'ibikunle@gmail.com',
     title: 'Classic Chiken & Ice Creams',
     slug: 'classic-chiken-cream',
     image: 'food2.jpeg',
@@ -95,10 +114,10 @@ const dummyMeals = [
       5. Serve:
          Serve hot, garnished with parsley if desired.
     `,
-    creator: 'Atanda Marriam',
-    creator_email: 'marriamA@gmail.com',
   },
   {
+    userName: 'Atanda Marriam',
+    userEmail: 'marriamA@gmail.com',
     title: 'Semo & Eggusi Soup',
     slug: 'semo-egusi-soup',
     image: 'food11.jpeg',
@@ -117,10 +136,10 @@ const dummyMeals = [
       4. Serve:
          Slice hot and enjoy with a sprinkle of basil leaves.
     `,
-    creator: 'Atanda Marriam',
-    creator_email: 'marriamA@gmail.com',
   },
   {
+    userName: 'Timothy kunle',
+    userEmail: 'atandatimothy26@gmail.com',
     title: 'Black Amala',
     slug: 'black-amala',
     image: 'food12.jpeg',
@@ -139,10 +158,10 @@ const dummyMeals = [
       4. Serve:
       Serve hot with a slice of lemon and a side of potato salad or greens.
  `,
-    creator: 'Atanda Ibikunle',
-    creator_email: 'ibikunle@gmail.com',
   },
   {
+    userName: 'Atanda Ibikunle',
+    userEmail: 'ibikunle@gmail.com',
     title: 'Pando With Okro',
     slug: 'pando-with-okro',
     image: 'food13.jpeg',
@@ -161,53 +180,52 @@ const dummyMeals = [
       4. Serve:
          Enjoy this simple, flavorful salad as a side dish or light meal.
     `,
-    creator: 'Timothy kunle',
-    creator_email: 'atandatimothy26@gmail.com',
   },
 ];
 
-const dummyUsers = [
-  {
-    name: 'Atanda Marriam',
-    email: 'marriamA@gmail.com',
-    password: 'marriam@3',
-  },
-  {
-    name: 'Atanda Ibikunle',
-    email: 'ibikunle@gmail.com',
-    password: 'ibi#kunle',
-  },
-  {
-    name: 'Timothy kunle',
-    email: 'atandatimothy26@gmail.com',
-    password: 'kunle',
-  },
-];
-
-async function seed() {
-  try {
-    // Seed meals only if empty
-    const mealCount = await prisma.meal.count();
-    if (mealCount === 0) {
-      await prisma.meal.createMany({ data: dummyMeals });
+async function seed(){
+  for(const user of dummyUsers){
+    const exist = await prisma.user.findUnique({
+      where: {email: user.email}
+    })
+    if(!exist){
+      const hashedPassword = await bcrypt.hash(user.password, 10)
+      await prisma.user.create({
+        data:{
+         name: user.name,
+         email: user.email,
+         password: hashedPassword,
+         verified: true
+        }
+      })
     }
+  }
 
-    // Seed users only if empty
-    const userCount = await prisma.user.count();
-    if (userCount === 0) {
-      for (const user of dummyUsers) {
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        await prisma.user.create({
-          data: {
-            name: user.name,
-            email: user.email,
-            password: hashedPassword,
-          },
-        });
+  for(const meal of dummyMeals){
+    const user = await prisma.user.findUnique({
+      where: {email: meal.userEmail}
+    })
+
+    if(!user) continue
+
+    await prisma.meal.create({
+      data:{
+        userName: meal.userName,
+        userEmail: meal.userEmail,
+        title: meal.title,
+        slug: meal.slug,
+        image: meal.image,
+        summary: meal.summary,
+        instructions: meal.instructions,
+        userId: user.id
       }
-    }
-  } finally {
-    await prisma.$disconnect();
+    })
+
   }
 }
-seed().catch(() => process.exit(1));
+seed()
+  .catch(console.error)
+  .finally(async()=> {
+    await prisma.$disconnect()
+  })
+

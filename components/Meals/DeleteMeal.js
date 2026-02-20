@@ -5,16 +5,17 @@ import { deleteMeal } from "@/lib/meals";
 import { IoCheckmarkDoneSharp } from "react-icons/io5"; 
 import { FaXmark } from "react-icons/fa6";
 import { useRouter } from 'next/navigation'
+import { api } from "@/lib/api";
 
 
-export default function DeleteMeal({setIsdeleted, params}){
+export default function DeleteMeal({setIsdeleted, id}){
   const [isPending, startTransition] = useTransition();
   const [deleteAlert, setDeleteAlert] = useState(false)
   const router = useRouter()
 
   const  handleDeleteMeal = ()=>{
     startTransition(async()=>{
-      const { id } = await params;
+      await api.get('/api/auth/accesstoken');
       const result = await deleteMeal(id);
       if(!result.success){
         setDeleteAlert(true)
