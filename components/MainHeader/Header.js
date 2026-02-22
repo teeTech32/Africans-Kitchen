@@ -17,7 +17,7 @@ export default function Header(){
   const router = useRouter()
 
   async function handleLoggOut(){
-    const logout = await fetch('/api/utils/logout/',{method: 'POST'})
+    const logout = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/utils/logout/`,{method: 'POST'})
     if(logout.ok){
       router.push('/')
     }
