@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(){
-  const cookieStored = await cookies();
+  const cookieStored = cookies();
   const accessToken = cookieStored.get('accessToken')?.value;
    if(!accessToken){
     return NextResponse.json({error:"Unauthorized User"}, {status:401})
