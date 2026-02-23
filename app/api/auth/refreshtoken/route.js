@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 
 export async function POST() {
-  const cookieStored = await cookies()
+  const cookieStored = cookies()
   const refreshToken = cookieStored.get('refreshToken')?.value;
   const decoded =  verifyRefreshToken(refreshToken);
   if(!refreshToken){
