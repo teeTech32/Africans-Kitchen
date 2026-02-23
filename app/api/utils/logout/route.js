@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { hashRefreshToken } from '../tokens/route'
 
 export async function POST() {
-  const cookieStored = await cookies()
+  const cookieStored = cookies()
   const refreshToken = cookieStored.get('refreshToken')?.value;
   if(refreshToken){
     await prisma.session.deleteMany({
