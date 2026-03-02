@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { hashRefreshToken } from '../tokens/route'
+import prisma from "@/lib/prisma";
 
 export async function POST() {
   const cookieStored = cookies()
