@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import xss from "xss";
 import slugify from "slugify";
 import prisma from "@/lib/prisma";
