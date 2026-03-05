@@ -42,7 +42,7 @@ export default function MainImages(){
     return ()=> clearInterval(interval);
   },[]  )
 
-  return<div className='relative w-full max-w-[350px] md:max-w-none md:w-full mx-auto md:ml-5 lg:m-10 mt-38 md:mt-40 lg:mt-60 mb-10 h-64 md:h-96 overflow-hidden rounded-lg shadow-lg' data-aos='fade-right'
+  return<div className='relative min-w-[350px]  md:w-full mx-auto md:ml-5 lg:m-10 mt-38 md:mt-40 lg:mt-60 mb-10 h-64 md:h-96 overflow-hidden rounded-lg shadow-lg' data-aos='fade-right'
                                                                      data-aos-offset='200'
                                                                      data-aos-delay='50'
                                                                      data-aos-duration='1000'

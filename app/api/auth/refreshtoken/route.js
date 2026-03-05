@@ -1,11 +1,11 @@
 import {cookies} from "next/headers"
-import { hashRefreshToken, signAccessToken, verifyRefreshToken, signRefreshToken} from "../../utils/tokens/route"
+import { hashRefreshToken, signAccessToken, verifyRefreshToken, signRefreshToken} from "@/lib/tokens"
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 
 export async function POST() {
-  const cookieStored = cookies()
+  const cookieStored = await cookies()
   const refreshToken = cookieStored.get('refreshToken')?.value;
   const decoded =  verifyRefreshToken(refreshToken);
   if(!refreshToken){
@@ -60,5 +60,5 @@ export async function POST() {
       hashedRefreshToken: hashRefreshToken(tokenRefreshed)
     }  
   })
-  return NextResponse.json({success: true} ,{status: 200}  )
+  return NextResponse.json({success: true}, {status: 200}  )
 }

@@ -1,10 +1,10 @@
 import { cookies } from "next/headers" 
-import { verifyAccessToken } from "../../utils/tokens/route";
+import { verifyAccessToken } from "@/lib/tokens";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(){
-  const cookieStored = cookies();
+  const cookieStored = await cookies();
   const accessToken = cookieStored.get('accessToken')?.value;
    if(!accessToken){
     return NextResponse.json({error:"Unauthorized User"}, {status:401})

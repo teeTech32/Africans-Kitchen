@@ -71,7 +71,7 @@ export default function Header(){
                                   </button>}
               </div>
             </div>
-            <div className="hover:text-orange-600 text-white text-3xl cursor-pointer top-4 right-10 absolute lg:hidden " onClick={()=>setIstoggle((istoggle)=> !istoggle)}>
+            <div className="hover:text-orange-600 text-white text-3xl cursor-pointer top-4 right-5 absolute lg:hidden " onClick={()=>setIstoggle((istoggle)=> !istoggle)}>
               { istoggle ? <AiOutlineClose className="text-2xl"/> : <BiMenu />}
             </div>
           </main>

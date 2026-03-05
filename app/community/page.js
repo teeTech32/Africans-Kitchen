@@ -8,7 +8,6 @@ import communityIcon from '@/assets/icons/communityIcon.png'
 import community from '@/assets/icons/community.jpg'
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { api } from "@/lib/api"
 
 export default function Community(){
   const [loading, setLoading] = useState(true)

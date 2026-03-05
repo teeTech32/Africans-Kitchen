@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma"
 import { v4 as uuidv4 } from "uuid"
 import { NextResponse } from "next/server"
 import { sendResetEmail } from "@/lib/email"
-import { hashRefreshToken } from "../../utils/tokens/route"
+import { hashRefreshToken } from "@/lib/tokens"
 
 
 export async function POST(req) {

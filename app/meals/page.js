@@ -2,7 +2,6 @@
 import { Suspense } from "react"
 import MealGrid from "@/components/Meals/MealGrid"
 import { getMeals } from "@/lib/meals"
-import Link from "next/link"
 import ShareForm from "@/components/Meals/ShareForm"
 
 export const metadata = {

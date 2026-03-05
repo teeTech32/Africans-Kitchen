@@ -3,7 +3,6 @@
 import MealReturnValue from "@/components/Meals/MealReturnValue"
 import { getAuthUser } from "@/lib/auth"
 import { getMeal } from "@/lib/meals"
-import { redirect } from "next/navigation"
 
 
 const AWS_REGION = process.env.AWS_REGION

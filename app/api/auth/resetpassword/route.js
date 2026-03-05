@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { NextResponse } from 'next/server'
 import prisma from "@/lib/prisma"
-import { hashRefreshToken } from '../../utils/tokens/route'
+import { hashRefreshToken } from '@/lib/tokens'
 
 export async function POST(req) {
   try {

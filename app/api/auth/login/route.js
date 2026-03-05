@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt"
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
-import { signAccessToken, hashRefreshToken, signRefreshToken } from "../../utils/tokens/route"
+import { signAccessToken, hashRefreshToken, signRefreshToken } from "@/lib/tokens"
 
 const JWT_SECRET = process.env.JWT_SECRET
 
