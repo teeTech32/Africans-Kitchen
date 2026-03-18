@@ -10,8 +10,8 @@ export const metadata = {
 }
 
 async function Meals(){
-  const meals = await getMeals()
-  return<MealGrid meals={meals}/>
+  const mealData = await getMeals(1, 5)
+  return<MealGrid mealData={mealData}/>
 }
 
 export default function MealsPage(){

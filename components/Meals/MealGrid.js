@@ -5,8 +5,32 @@ import MealItem from "./MealItem";
 import { GrFormSearch } from "react-icons/gr";
 import { useDebounced } from "@/lib/useDebounced";
 
-export default function MealGrid({meals}){
+
+export default function MealGrid({mealData}){
+
+  const [meals, setMeals] = useState(mealData.data);
   const [filterName, setFilterName] = useState('');
+  const [page, setPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  
+  const loadMore = async() =>{
+    setIsLoading(true)
+
+    const nextPage = page + 1
+
+    const mealData = await fetch(`/api/meals?page=${nextPage}&limit=5`)
+    console.log(mealData)
+
+    const data = await mealData.json()
+
+    setMeals((prev) => [...prev, ...data.data])
+    setPage(nextPage)
+    if(nextPage >= data.meta.totalPages){
+      setHasMore(false)
+    }
+    setIsLoading(false)
+  }
 
   function handleOnchange(e){
     setFilterName(e.target.value)
@@ -43,12 +67,28 @@ const filterMeals = useMemo(()=>{
                 </div>
               </div>
           </div>
-          <ul className="m-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <ul className="m-10 grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
             {filterMeals.map((meal)=>(
               <li key={meal.id}>
-                <MealItem {...meal}/>
+                <MealItem {...meal} setMeals = {setMeals} meta = {mealData.meta}/>
               </li>
             ))}
           </ul>
+          <div className="relative z-10 mb-10 mx-20 flex justify-end">
+            <div className=" w-28 md:w-34 p-2 md:p-3 font-bold bg-amber-500 text-white text-xs md:text-sm hover:bg-amber-400 hover:text-black rounded-2xl">
+              Total Meals: {mealData.meta.total}
+            </div>
+            <div className=" mx-2 w-28 md:w-34 p-2 md:p-3 font-bold bg-amber-500 text-white text-xs md:text-sm hover:bg-amber-400 hover:text-black rounded-2xl">
+              Total Pages: {mealData.meta.totalPages}
+            </div>
+            <button type="submit" className=" w-20 md:w-32 p-2 md:p-3 font-bold bg-amber-500 text-white text-xs md:text-sm hover:bg-amber-400 hover:text-black rounded-2xl " onClick={loadMore}
+            disabled={!hasMore || isLoading}
+            style={{
+              opacity: hasMore ? 1 : 0.5,
+              cursor: hasMore ? "pointer" : "not-allowed"
+            }}>
+              {isLoading ? "Loading..." : hasMore ? "Load More" : "No meal"}
+            </button>
+          </div>
         </>
 }
