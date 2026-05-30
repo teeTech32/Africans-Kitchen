@@ -2,7 +2,7 @@
 import { useState, useEffect, useActionState } from "react"
 import Image from "next/image"
 import image from "../../../assets/usersauth/images.jpeg"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { TiDelete } from "react-icons/ti";
 import { loginUsers } from "@/lib/actions"
 import { FaEye, FaEyeSlash } from "react-icons/fa6"
@@ -16,6 +16,9 @@ export default function Login(){
     password: ''
   })
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
 
   useEffect(() => {
     const timeout = state.message || state.information ? setTimeout(() => {
@@ -28,13 +31,13 @@ export default function Login(){
     setLoginAlert(state.information);
     setLoginData({email:'', password:''})
     setTimeout(()=>{
-        router.push('/meals')
-      },5000)  
+      router.replace(callbackUrl)
+    }, 5000)  
   }
   return ()=>{
     if(timeout) clearTimeout(timeout)
   }
-}, [state.message, state.information, state.timestamp, router]);
+}, [state.message, state.information, state.timestamp, router, callbackUrl]);
 
   const {email, password} = loginData
 
@@ -58,7 +61,7 @@ export default function Login(){
                        <p className="hidden md:block text-white text-sm font-extrabold absolute top-6 right-45">Welcome Back</p>
                        <div className="relative md:mt-12 h-[351px] w-[300px]  bg-transparent md:rounded-l-none rounded-lg bg-gradient-to-tr from-orange-400 via-red-700 to-yellow-300">
                         <button type="button" className="absolute top-2 right-2 ">
-                          <TiDelete className="text-white hover:text-red-600 text-2xl md:text-3xl cursor-pointer " onClick={()=>router.push('/meals')} />
+                          <TiDelete className="text-white hover:text-red-600 text-2xl md:text-3xl cursor-pointer " onClick={()=>router.back()} />
                         </button>
                          <header className="text-center text-white text-sm font-extrabold p-4">
                            LogIn

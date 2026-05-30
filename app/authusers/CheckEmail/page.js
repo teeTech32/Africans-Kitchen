@@ -35,7 +35,7 @@ export default function   CheckEmail(){
               <div className="flex justify-center">
                 <div className="relative mt-20 h-[200px] w-[300px]  bg-transparent  rounded-lg bg-gradient-to-tr from-orange-400 via-red-700 to-yellow-300">
                   <button type="button" className="absolute top-2 right-3">
-                    <TiDelete className="text-white hover:text-red-600 text-2xl md:text-3xl cursor-pointer " onClick={()=>router.push('/meals')} />
+                    <TiDelete className="text-white hover:text-red-600 text-2xl md:text-3xl cursor-pointer " onClick={()=>router.back()} />
                   </button>
                   <header className="text-center text-white text-sm font-extrabold p-4">
                     Account Confirmation

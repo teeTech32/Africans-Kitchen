@@ -10,21 +10,26 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
-import { useEffect } from "react";
-import { api } from "@/lib/api";
-
+import { useEffect, useState } from "react";
+import { IoCheckmarkDoneSharp } from "react-icons/io5"; 
+import { FaXmark } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 export default function Home(){
+  const router = useRouter()
+  const[useAI, setUseAI] = useState(false)
+  const[notifyAcception, setNotifyAcception] = useState(false)
+  const[notifyRejection, setNotifyRejection] = useState(false)
+  
   useEffect(()=>{
     AOS.init({
       duration: 1000,
       once: true
     })
+    setTimeout(()=>{
+      setUseAI(true)
+    },5000)
   },[])
-
-  async function handledCommunity(){
-   await api.get('/api/auth/accesstoken')
-  }
 
 return <div>
           <header className="flex flex-col  md:flex-row md:gap-2 xl:gap-4 ">
@@ -35,7 +40,7 @@ return <div>
                                     data-aos-delay='50'
                                     data-aos-duration='1000'
                                     data-aos-easing='ease-in-out'>
-                <h1 className=" mx-10 mb-3 md:mt-30 lg:mt-50 font-bold text-sm md:text-xl  xl:text-2xl  text-transparent bg-gradient-to-r from-red-500 via-yellow-300 to-red-500 bg-clip-text transition-all duration-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110">
+                <h1 className=" mx-10 mb-3 md:mt-30 lg:mt-50 xl:mt-70 font-bold text-sm md:text-xl  xl:text-2xl  text-transparent bg-gradient-to-r from-red-500 via-yellow-300 to-red-500 bg-clip-text transition-all duration-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110">
                   AFRICANS&apos; FOODS FOR AFRICAN FOODIES
                 </h1>
                 <p className="text-sm md:text-lg xl:text-xl font-semibold md:font-bold text-white mx-5 my-3">
@@ -47,11 +52,31 @@ return <div>
               data-aos-delay='1000'
               data-aos-duration='1000'
               data-aos-easing='ease-in-out'>
-                <Link href={'/community'} className="m-2 btn cursor-pointer text-transparent hover:text-white bg-gradient-to-r from-yellow-300  to-red-500 bg-clip-text  drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110 border border-gray-500 bg-transparent px-2 py-1 rounded-md  focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200 " onClick={handledCommunity}>Join the community</Link>
+                <Link href={'/community'} className="m-2 btn cursor-pointer text-transparent hover:text-white bg-gradient-to-r from-yellow-300  to-red-500 bg-clip-text  drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5 scale-110 border border-gray-500 bg-transparent px-2 py-1 rounded-md  focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200 ">Join the community</Link>
                 <Link href={'/meals'} className="m-2 btn cursor-pointer text-white bg-gradient-to-r from-red-600  to-yellow-300 hover:text-slate-800  transition-all duration-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]  translate-0.5  p-1 rounded-md">Explore Meals</Link>
               </div>
             </div>
-          </header>
+          </header> 
+          {useAI && <div className="absolute right-10 md:right-15 top-70 md:top-110 xl:top-140 transition-all ">
+            <div className="bg-gradient-to-r from-orange-600 to-yellow-500 p-2 md:p-3 xl:p-4 w-36 md:w-42 xl:w-52 h-24 md:h-30 xl:h-38  rounded-t-xl rounded-bl-xl">
+              <p className="text-white text-xs md:text-sm xl:text-xl font-semibold">Join us and share your food recipe using AI.
+              </p>
+              <button onMouseOut={()=> setNotifyAcception(false)} onMouseOver={()=> setNotifyAcception(true)} onClick={()=>router.push('/meals/share')} className="bg-white rounded-md text-green-600 float-end mt-2 hover:border-4 hover:border-green-600">
+                <IoCheckmarkDoneSharp className="text-2xl md:text-3xl px-3 md:px-4 cursor-pointer"/>
+              </button>
+              <button onMouseOut={()=> setNotifyRejection(false)} onMouseOver={()=> setNotifyRejection(true)} onClick={()=> setUseAI(false)} className="bg-white rounded-md text-red-600 mt-2 hover:border-4 hover:border-red-600">
+                <FaXmark className="text-2xl md:text-3xl px-3 md:px-4 cursor-pointer"/>
+              </button>
+            </div>
+            <div className="">
+            {notifyRejection && <p className="text-xs md:text-sm xl:text-md bg-black/55 w-30 rounded-md text-white p-2">
+              Not now? Refresh the page when you need me back. 
+            </p>}
+            {notifyAcception && <p className="text-xs md:text-sm xl:text-md bg-black/55 w-11 md:w-12 rounded-md text-white p-2 float-end">
+              Okay
+            </p>}
+          </div>
+          </div>}
           <main className="text-white mx-10 mb-20">
             <section className="my-10">
               <h2 className="flex justify-center font-bold text-sm md:text-lg  mb-2" data-aos='zoom-in'

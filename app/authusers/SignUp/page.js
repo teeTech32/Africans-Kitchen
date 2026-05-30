@@ -93,7 +93,7 @@ return <>{emailSent ?  <div className="fixed w-screen h-full bg-black/75 z-50">
                   <p className="hidden md:block text-white text-sm font-extrabold absolute top-2 right-55">Welcome</p>
                     <div className="md:h-[370px] h-[400px] w-[300px]  bg-transparent md:rounded-l-none rounded-lg bg-gradient-to-tr from-orange-400 via-red-700 to-yellow-300 md:mt-7">
                       <button type="button" className="absolute top-3 right-3 md:top-10">
-                        <TiDelete className="text-white hover:text-red-600 text-2xl md:text-3xl cursor-pointer " onClick={()=>router.push('/meals')} />
+                        <TiDelete className="text-white hover:text-red-600 text-2xl md:text-3xl cursor-pointer " onClick={()=>router.back()} />
                       </button>
                       <header className="text-center text-white text-sm font-extrabold md:p-2 p-4">
                         Register

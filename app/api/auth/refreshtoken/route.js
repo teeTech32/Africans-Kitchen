@@ -7,10 +7,10 @@ import { NextResponse } from "next/server";
 export async function POST() {
   const cookieStored = await cookies()
   const refreshToken = cookieStored.get('refreshToken')?.value;
-  const decoded =  verifyRefreshToken(refreshToken);
   if(!refreshToken){
     return NextResponse.json({error:"Unauthorized User"}, {status:401})
   }
+  const decoded =  verifyRefreshToken(refreshToken);
   if(!decoded){
     return NextResponse.json({error:"Unauthorized User"}, {status:401})
   }
