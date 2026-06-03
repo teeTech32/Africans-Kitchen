@@ -48,9 +48,7 @@ export default function Header(){
                 Browse Meals
               </NavLink>
               <NavLink href={'/community'} className="my-2">
-                <button  onClick={handledCommunity} className="cursor-pointer">
-                  Foodies Community
-                </button>
+                Foodies Community
               </NavLink>
               <NavLink href={'/authusers/SignUp'} className="hover:text-orange-600">
                 <button className="hover:text-orange-600 cursor-pointer">
