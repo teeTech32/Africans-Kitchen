@@ -33,7 +33,7 @@ export default  function EditMeal({meal, setIsedited}){
                           .filter(line => line !== '') // kepp lines with spaces
                           .join('\n');                // Join with single lines 
 
-  const imageUrl = `https://teetech-foodies-bucket.s3.eu-north-1.amazonaws.com/${image}`  
+  const imageUrl = `https://new-foodies.s3.eu-north-1.amazonaws.com/${image}`  
   
   function handleEditInput(){
     pickEditImage.current.click()
