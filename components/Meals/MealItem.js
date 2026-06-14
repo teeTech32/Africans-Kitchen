@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image"
 import Link from "next/link"
 import { GiLoveHowl } from "react-icons/gi";
-import { api } from "@/lib/api";
+
 
 export default function MealItem({title, slug, userName, summary, image}){
   const [isLiked, setIsLiked] = useState(false)
@@ -15,7 +15,7 @@ export default function MealItem({title, slug, userName, summary, image}){
                                                                data-aos-easing='ease-in-out'>
           <header >
             <div className="flex justify-center ">
-              <Image src={`https://teetech-foodies-bucket.s3.eu-north-1.amazonaws.com/${image}`} alt={title} className="relative w-80 md:w-70 h-80 md:h-70 rounded-t-md" width={150} height={150}/>
+              <Image src={`https://new-foodies.s3.eu-north-1.amazonaws.com/${image}`} alt={title} className="relative w-80 md:w-70 h-80 md:h-70 rounded-t-md" width={150} height={150}/>
             </div>
           </header>
           <div className="flex justify-center">

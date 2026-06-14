@@ -9,7 +9,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'teetech-foodies-bucket.s3.eu-north-1.amazonaws.com',
+        hostname: 'new-foodies.s3.eu-north-1.amazonaws.com',
         port: '',
         pathname: '/**',
       },
