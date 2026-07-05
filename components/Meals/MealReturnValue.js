@@ -44,7 +44,7 @@ export default function MealReturnValue({meal, imageUrl, mealInstructions, userI
         </div>
       </header>
       <main className="flex flex-col md:flex-row bg-black/15 mx-10 xl:mx-15 mb-15 rounded-md">
-        <h2 className="text-white text-sm md:text-lg xl:text-xl font-extrabold mx-5 mt-5 md-2">Cooking Instructions:</h2>
+        <h2 className="text-white text-sm md:text-lg xl:text-xl font-extrabold mx-5 mt-5 mb-5">Cooking Instructions:</h2>
         <p className="text-white text-xs md:text-sm xl:text-lg  mx-5 mb-5" dangerouslySetInnerHTML={{
           __html:mealInstructions
         }}></p> 

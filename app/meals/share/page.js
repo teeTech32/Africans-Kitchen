@@ -1,115 +1,71 @@
 "use client"
 
-import { startTransition, useActionState, useEffect, useState } from "react"
+import { useContext, useActionState, useEffect, useState} from "react"
 import ImagePicker from "@/components/Meals/ImagePicker"
-import { sharemealData } from "@/lib/actions"
 import { TiDelete } from "react-icons/ti";
 import { HiSparkles } from "react-icons/hi2";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import { getUser } from "@/components/Meals/ShareForm";
 import { TbAlertHexagonFilled } from "react-icons/tb";
 import { FaXmark } from "react-icons/fa6";
+import {FormContext} from '@/app/context/page'
 
 export default function ShareMeals(){
-  const [state, formAction, isPending] = useActionState(sharemealData, {message:null});
-  const [visibleMessage, setVisibleMessage]= useState('')
-  const [loading, setLoading] = useState(true)
-  const [pickedImage, setPickedImage] = useState(null)
-  const [user, setUser] = useState(null)
-  const [formInputData, setFormInputData] = useState({
-      title: '',
-      summary: '',
-      instructions:'',
-    })
-  const [lastFormData, setLastFormData] = useState(null);
-  const [notification, setNotification] = useState(false);
-  const [mealAbsent, setMealAbsent] = useState(false);
-  const [aiAbsent, setAiAbsent] = useState(false);
+  const {state, formAction, isPending, visibleMessage, setVisibleMessage, loading, pickedImage, setPickedImage, user, lastFormData, notification, setNotification, zodInputValidation, setZodInputValidation, zoderrormessage, spinner, formInputData, setFormInputData, handledSubmitForm, handleChange, setDataInputEmpty, handleAiRequest, fetchUser } = useContext(FormContext)
+
+  
   const router = useRouter()
 
-useEffect(()=>{
-  const fetchUser = async()=>{
-    try{
-      const response = await getUser();
-      setUser(response)
-    }catch(error){
-      router.push('/authusers/LogIn');
-      return
-    }finally{
-      setLoading(false)
+  useEffect(()=>{
+    fetchUser()
+  },[fetchUser])
+
+  useEffect(()=>{
+    if(state?.error === "Unauthorized User" && lastFormData){
+      (async()=>{
+        try{
+          // Siliently refresh the token
+          await api.post('/api/auth/refreshtoken');
+          // Re-dispatch the server action
+          startTransition(()=>{
+            formAction(lastFormData);
+          })
+        }catch(error){
+          router.push('/authusers/LogIn')
+        }
+      })()
     }
-  }
-  fetchUser();
-},[router]);
+  },[lastFormData, state, formAction, router])
 
-const handledSubmitForm = (formData)=>{
-  setLastFormData(formData);
-  startTransition(()=>{
-    formAction(formData);
-  })
-}
-
-useEffect(()=>{
-  if(state?.error === "Unauthorized User" && lastFormData){
-    (async()=>{
-      try{
-        // Siliently refresh the token
-        await api.post('/api/auth/refreshtoken');
-        // Re-dispatch the server action
-        startTransition(()=>{
-          formAction(lastFormData);
-        })
-      }catch(error){
-         router.push('/authusers/LogIn')
+  useEffect(()=>{
+    const timeout = state.message ? setTimeout(() => {
+      setVisibleMessage('');
+    }, 5000) : null;
+    if(state.message) {
+      setVisibleMessage(state.message);
+      if(state.message === 'Something went wrong, check your internet connections.'){
+        const handleTimeout = setTimeout(()=>{
+          setPickedImage(null)
+        },5000)
+        return ()=> clearTimeout(handleTimeout);
       }
-    })()
-  }
-}, [state, lastFormData, formAction, router])
-  
-useEffect(() => {
-  const timeout = state.message ? setTimeout(() => {
-    setVisibleMessage('');
-  }, 5000) : null;
-  if(state.message) {
-    setVisibleMessage(state.message);
-    if(state.message === 'Something went wrong, check your internet connections.'){
-      const handleTimeout = setTimeout(()=>{
-        setPickedImage(null)
-      },5000)
-      return ()=> clearTimeout(handleTimeout);
+    } else {
+      setFormInputData({
+        title: '',
+        summary: '',
+        instructions:'',
+      });
+      setPickedImage(null)
     }
-  } else {
-    setFormInputData({
-      title: '',
-      summary: '',
-      instructions:'',
-    });
-    setPickedImage(null)
-  }
-  return () => {
-    if(timeout) clearTimeout(timeout);
-  };
-}, [state.message]);
-
+    return () => {
+      if(timeout) clearTimeout(timeout);
+    }; 
+  }, [state, setFormInputData, setPickedImage, setVisibleMessage])
+  
   const {title, summary, instructions} = formInputData
   const name = user?.name || ""
   const email = user?.email || ""
   
-  function handleChange(e){
-    setFormInputData({...formInputData, [e.target.id]: e.target.value})
-  }
-
-  function handleAiRequest(){
-    if(title === ''){
-    setMealAbsent(true)
-    }
-    if(title){
-      setAiAbsent(true)
-    }
-  }
-
   return<>
     {loading ? <div className="flex justify-center">
                 <p  className="text-white font-extrabold my-60 md:my-72 md:text-lg lg:text-2xl">Loading Shearing Form...</p> 
@@ -162,39 +118,32 @@ useEffect(() => {
                         rows={10}
                         name="instructions" 
                         id="instructions" 
-                        className="bg-gray-900 rounded-sm text-white w-full text-xs md:text-sm p-2 relative z-10"value={instructions} onChange={handleChange}/>
-                
+                        className="bg-gray-900 rounded-sm text-white w-full text-xs md:text-sm p-2 relative z-10" value={instructions} onChange={handleChange}/>  
             </p>
             <ImagePicker label={'Preview your image'} name={'image'} isRequired = {state.message} pickedImage = {pickedImage} setPickedImage = {setPickedImage}/>
-            <p className="mx-5 my-2">
-              <button  type="submit" disabled={isPending} className={`text-white font-semibold text-xs md:text-sm xl:text-lg bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 p-1 rounded-md cursor-pointer absolute ${visibleMessage ? 'bottom-12' : 'bottom-0'} right-5 hover:text-red-500 hover:transition-1000 duration-500 hover:scale-105`}>{isPending ? "Sharing..." : "Share Meal"}</button>
-            </p>
+            <div className="mx-5 my-2 inline-flex  float-start">
+              <button  type="submit" disabled={isPending} className={`text-black font-semibold text-xs md:text-sm xl:text-lg bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 py-1 px-2 rounded-md cursor-pointer absolute ${visibleMessage ? 'bottom-12' : 'bottom-0'} right-5 hover:text-red-500 hover:transition-1000 duration-500 hover:scale-105`}>{isPending ? "Sharing..." : "Share Meal"}</button>
+              <button  type="cancel" onClick={setDataInputEmpty} className={`text-black font-semibold text-xs md:text-sm xl:text-lg bg-gradient-to-l from-red-700 via-yellow-400 to-orange-400 py-1 px-2 rounded-md cursor-pointer absolute ${visibleMessage ? 'bottom-12' : 'bottom-0'} right-30 md:right-35 xl:right-45 hover:text-red-500 hover:transition-1000 duration-500 hover:scale-105`}>Cancel</button>
+            </div>
               {visibleMessage && <p className="bg-red-600 p-2 mx-10 md:mx-20 rounded-md text-white text-center text-sm md:text-lg xl:text-xl font-bold">{visibleMessage}
             </p>}
           </form> 
         </main>
-        {mealAbsent &&  <div className="fixed w-screen h-full bg-black/75 backdrop-blur-sm top-0 left-0 z-50">
+        {zodInputValidation &&  <div className="fixed w-screen h-full bg-black/75 backdrop-blur-sm top-0 left-0 z-50">
             <div className="flex justify-center items-center h-screen">
-              <div className="bg-white border-x-10 border-amber-500 rounded-2xl w-[280px] md:w-[320px] h-[170px] md:h-[230px] flex flex-col px-3 pb-3">
-                <div  className="inline-flex w-65 h-65 md:w-75 md:h-75 md:gap-45 justify-between gap-43 ">
+              <div className="bg-white border-x-10 border-amber-500 rounded-2xl w-[280px] md:w-[300px] h-[130px] md:h-[165px] flex flex-col px-3 pb-3 md:pb-2">
+                <div  className="inline-flex md:gap-45 justify-between gap-43 w-65 md:w-70">
                   <TbAlertHexagonFilled className="text-amber-500"/>
-                  <FaXmark onClick={()=>setMealAbsent(false)} className="cursor-pointer text-black hover:text-red-600 p-4 md:p-6"/>
+                  <FaXmark onClick={()=>setZodInputValidation(false)} className="cursor-pointer text-black hover:text-red-600 p-4 md:p-5 "/>
                 </div>
                 <p className="text-black font-extrabold text-sm md:text-lg mb-1">Note:</p>
-                <p className="text-black text-sm md:text-lg ">You need to enter your meal name or meal title before AI can help you generate its summary and cooking steps.</p>
+                <p className="text-black text-sm md:text-lg ">{zoderrormessage}</p>
               </div>
             </div>
           </div> } 
-           {aiAbsent &&  <div className="fixed w-screen h-full bg-black/75 backdrop-blur-sm top-0 left-0 z-50">
-            <div className="flex justify-center items-center h-screen">
-              <div className="bg-white border-x-10 border-orange-600 rounded-2xl w-[280px] md:w-[320px] h-[150px] md:h-[210px] flex flex-col px-3 pb-3">
-                <div  className="inline-flex w-65 h-65 md:w-75 md:h-75 md:gap-45 justify-between gap-43 ">
-                  <TbAlertHexagonFilled className="text-orange-600"/>
-                  <FaXmark onClick={()=>setAiAbsent(false)} className="cursor-pointer text-black hover:text-red-600 p-4 md:p-6"/>
-                </div>
-                <p className="text-black font-extrabold text-sm md:text-lg mb-1">Note:</p>
-                <p className="text-black text-sm md:text-lg">This feature has not been implemented yet, please bear with us, thank you.</p>
-              </div>
+          {spinner &&  <div className="fixed w-screen inset-0 h-full bg-black/75 backdrop-blur-sm z-[5000] flex justify-center items-center">
+            <div className=" md:h-[150px] md:w-[150px] h-[100px] w-[100px] animate-spin rounded-full border-[8px] md:border-[12px] border-solid border-t-amber-500 border-r-transparent border-b-amber-500 border-l-transparent justify-items-center">
+             <p className="text-white text-sm font-bold md:text-lg mt-8 md:mt-12">teeTech</p> 
             </div>
           </div> } 
       </div>
