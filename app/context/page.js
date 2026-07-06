@@ -63,15 +63,19 @@ export default function FormProvider({children}){
   async function handleAiRequest(){
     try{
       setSpinner(true)
+      console.log("spinner true")
       const response = await api.post('/api/generate-recipe',{meal: title});
-      console.log(response.data)
       return setAiRecipe(response.data)
     }catch(error){
-      setZoderrormessage(error.response?.data?.error)
+      console.log(error)
+      console.log(error.message)
+      console.log(error.response?.data)
+      setZoderrormessage(error.response?.data?.error ?? error.message ?? "Something went wrong")
       setZodInputValidation(true)
       return
     }finally{
       setSpinner(false)
+      console.log("spinner false")
     }
   }
   
