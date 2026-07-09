@@ -1,6 +1,7 @@
 "use client"
 
-import { useContext, useActionState, useEffect, useState} from "react"
+import { startTransition, useContext, useEffect, useActionState, useState } from "react"
+import { sharemealData } from '@/lib/actions';
 import ImagePicker from "@/components/Meals/ImagePicker"
 import { TiDelete } from "react-icons/ti";
 import { HiSparkles } from "react-icons/hi2";
@@ -11,9 +12,20 @@ import { FaXmark } from "react-icons/fa6";
 import {FormContext} from '@/app/context/page'
 
 export default function ShareMeals(){
-  const {state, formAction, isPending, visibleMessage, setVisibleMessage, loading, pickedImage, setPickedImage, user, lastFormData, notification, setNotification, zodInputValidation, setZodInputValidation, zoderrormessage, spinner, formInputData, setFormInputData, handledSubmitForm, handleChange, setDataInputEmpty, handleAiRequest, fetchUser } = useContext(FormContext)
+  const {visibleMessage, setVisibleMessage, loading, pickedImage, setPickedImage, user, fetchUser } = useContext(FormContext)
 
-  
+  const [state, formAction, isPending] = useActionState(sharemealData, {message:null});
+  const [spinner, setSpinner] = useState(false)
+  const [lastFormData, setLastFormData] = useState(null);
+  const [notification, setNotification] = useState(false);
+  const [zodInputValidation, setZodInputValidation] = useState(false);
+  const [zoderrormessage, setZoderrormessage] = useState(null)
+  const [aiRecipe, setAiRecipe] = useState(null);
+  const [formInputData, setFormInputData] = useState({
+    title: '',
+    summary: '',
+    instructions:'',
+  })
   const router = useRouter()
 
   useEffect(()=>{
@@ -35,7 +47,7 @@ export default function ShareMeals(){
         }
       })()
     }
-  },[lastFormData, state, formAction, router])
+  },[state?.error, lastFormData, formAction, router])
 
   useEffect(()=>{
     const timeout = state.message ? setTimeout(() => {
@@ -60,7 +72,46 @@ export default function ShareMeals(){
     return () => {
       if(timeout) clearTimeout(timeout);
     }; 
-  }, [state, setFormInputData, setPickedImage, setVisibleMessage])
+  }, [state.message, setFormInputData, setVisibleMessage, setPickedImage])
+
+  async function handleAiRequest(){
+    try{
+      console.log("AI was clicked")
+      setSpinner(true)
+      const response = await api.post('/api/generate-recipe',{meal: title});
+      console.log("AI was clicked yes it was clicked")
+      console.log(response.data)
+      return setAiRecipe(response.data)
+    }catch(error){
+      console.log("Error is discovered")
+      console.log(error.message)
+      setZoderrormessage(error.response?.data?.error)
+      setZodInputValidation(true)
+      return
+    }finally{
+      setSpinner(false)
+    }
+  }
+
+  const handledSubmitForm = (formData)=>{
+      setLastFormData(formData);
+      startTransition(()=>{
+        formAction(formData);
+      })
+    }
+    
+    function handleChange(e){
+      setFormInputData({...formInputData, [e.target.id]: e.target.value})
+    }
+
+    function setDataInputEmpty(){
+      setFormInputData({
+      title: '',
+      summary: '',
+      instructions:'',
+    });
+  }
+  
   
   const {title, summary, instructions} = formInputData
   const name = user?.name || ""
@@ -142,7 +193,7 @@ export default function ShareMeals(){
             </div>
           </div> } 
           {spinner &&  <div className="fixed w-screen inset-0 h-full bg-black/75 backdrop-blur-sm z-[5000] flex justify-center items-center">
-            <div className=" md:h-[150px] md:w-[150px] h-[100px] w-[100px] animate-spin rounded-full border-[8px] md:border-[12px] border-solid border-t-amber-500 border-r-transparent border-b-amber-500 border-l-transparent justify-items-center">
+            <div className=" md:h-[150px] md:w-[150px] h-[100px] w-[100px] animate-spinner rounded-full border-[8px] md:border-[12px] border-solid border-t-amber-500 border-r-transparent border-b-amber-500 border-l-transparent justify-items-center">
              <p className="text-white text-sm font-bold md:text-lg mt-8 md:mt-12">teeTech</p> 
             </div>
           </div> } 
