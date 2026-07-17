@@ -14,12 +14,14 @@ import { useEffect, useState } from "react";
 import { IoCheckmarkDoneSharp } from "react-icons/io5"; 
 import { FaXmark } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import Whatsapp from "@/assets/icons/whatsapp.png"
 
 export default function Home(){
   const router = useRouter()
-  const[useAI, setUseAI] = useState(false)
-  const[notifyAcception, setNotifyAcception] = useState(false)
-  const[notifyRejection, setNotifyRejection] = useState(false)
+  const[useAI, setUseAI] = useState(false);
+  const[notifyAcception, setNotifyAcception] = useState(false);
+  const[notifyRejection, setNotifyRejection] = useState(false);
+  const[whatsappNotification, setWhatsappNotification] = useState(false);
   
   useEffect(()=>{
     AOS.init({
@@ -34,7 +36,7 @@ export default function Home(){
 return <div>
           <header className="flex flex-col  md:flex-row md:gap-2 xl:gap-4 ">
             <MainImages/>
-            <div className=" my-2 md:my-10 flex-col mx-10 md:mx-0 ">
+            <div className=" my-2 md:my-10 flex-col md:mx-0 ">
               <div className="my-2" data-aos='fade-left'
                                     data-aos-offset='200'
                                     data-aos-delay='50'
@@ -77,7 +79,7 @@ return <div>
             </p>}
           </div>
           </div>}
-          <main className="text-white mx-10 mb-20">
+          <main className="text-white px-6 mb-20">
             <section className="my-10">
               <h2 className="flex justify-center font-bold text-sm md:text-lg  mb-2" data-aos='zoom-in'
               data-aos-offset='200'
@@ -124,6 +126,12 @@ return <div>
                 </p>
               </div>
             </section>
+            <div className="">
+              <a href="https://wa.me/2347032603814"  target="_blank"  rel="noopener noreferrer" onMouseOver={()=>setWhatsappNotification(true)} onMouseOut={()=> setWhatsappNotification(false)}>
+                <Image src={Whatsapp} alt="WhatsApp" className="w-12 md:w-14 fixed right-10 md:right-12 bottom-20 bg-green-500 rounded-full drop-shadow-2xl z-50 text-base hover:scale-125 duration-300"/>
+              </a>
+              {whatsappNotification && <p className="bg-black text-white py-2 px-3 border-2 border-green-500 rounded-b-lg rounded-l-lg text-xs md:text-sm fixed right-15 md:right-19.5 bottom-10 md:bottom-8 z-50 ">WhatsApp Chat</p>}
+            </div>
             <section>
               <div className="flex justify-center my-5" data-aos='zoom-in'
                                                         data-aos-offset='200'

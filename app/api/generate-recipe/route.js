@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { openai } from "@/lib/openai";
 import { validateAndFix } from "@/lib/validateAndFix";
 import { hashRefreshToken, verifyAccessToken, verifyRefreshToken } from "@/lib/tokens";
-import { generateRecipeSchem } from "@/lib/generateSchema";
+import { generateRecipeSchem } from "@/lib/inputValidationWithZod";
 import prisma from "@/lib/prisma";
 
 export async function POST(request){
