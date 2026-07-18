@@ -31,6 +31,14 @@ export default function ContactUs(){
     }
   }, [state.error, state.message,]);
 
+  const handleOnSubmit = (e)=>{
+    if(!navigator.onLine){
+      e.preventDefault();
+      toast.error("You are offline!");
+      return
+    }
+  }
+
   const handleOnchange = (e)=>{
     setEmailData({ ...emailData, [e.target.name]:e.target.value });
   }
@@ -70,7 +78,7 @@ export default function ContactUs(){
               </div>
             </div>
             <div className="flex justify-center lg:absolute top-0.5 right-0.5">
-              <form action={formAction} className="relative bg-transparent bg-gradient-to-tr from-orange-400 via-red-700 to-yellow-300 max-w-[470px] h-full md:max-w-[450px] rounded-lg m-1.5 px-8">
+              <form action={formAction} onSubmit={handleOnSubmit} className="relative bg-transparent bg-gradient-to-tr from-orange-400 via-red-700 to-yellow-300 max-w-[470px] h-full md:max-w-[450px] rounded-lg m-1.5 px-8">
                 <button type="button" className="absolute top-3 left-3 lg:hidden">
                   <TiDelete className="text-white hover:text-gray-300 text-2xl md:text-3xl cursor-pointer " onClick={()=>router.push('/')} />
                 </button>
