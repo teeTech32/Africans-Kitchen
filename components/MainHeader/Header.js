@@ -10,6 +10,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { BiMenu } from 'react-icons/bi';
 import { useRouter } from "next/navigation"
 import { api } from "@/lib/api"
+import { toast } from "react-toastify"
 
 export default function Header(){
   const [istoggle, setIstoggle] = useState(false)
@@ -19,6 +20,8 @@ export default function Header(){
   async function handleLoggOut(){
     const logout = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/utils/logout/`,{method: 'POST'})
     if(logout.ok){
+      const data = await logout.json()
+      toast.success(data.message)
       router.push('/')
     }
   }

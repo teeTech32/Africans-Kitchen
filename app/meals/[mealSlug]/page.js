@@ -14,12 +14,10 @@ export default async function MealDetailsPage({ params }) {
   throw new Error("Missing AWS environment variables")
 }
 
-  // --- Step 4: Fetch authenticate user and fetch meal ---
   const {mealSlug}  = await params
   const user = await getAuthUser()
   const meal = await getMeal(mealSlug)
 
-  // --- Step 5: Build image URL ---
   const imageUrl = `https://${AWS_S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${meal.image}`
   const instructions = meal.instructions?.replace(/\n/g, "<br/>") || ""
 
@@ -33,7 +31,7 @@ export default async function MealDetailsPage({ params }) {
   )
 }
 
-// --- Step 8: Generate metadata for SEO ---
+// Search Engine Optimization (SEO)
 export async function generateMetadata({ params }) {
   const { mealSlug } = await params
   const meal = await getMeal(mealSlug)
@@ -43,7 +41,15 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: meal.title,
+    title: `${meal.title} Recipe | Foodies `,
     description: meal.summary,
+    alternates:{
+      canonicla: `/meals/${meal.slug}`
+    },
+    openGraph:{
+      title: meal.title,
+      description: meal.summary,
+      image: meal.image //We have this because only one image is saved each meal
+    }
   }
 }

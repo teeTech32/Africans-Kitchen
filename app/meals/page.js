@@ -1,22 +1,52 @@
-
 import { Suspense } from "react"
 import MealGrid from "@/components/Meals/MealGrid"
 import { getMeals } from "@/lib/meals"
 import ShareForm from "@/components/Meals/ShareForm"
 
+  // Search Engine Optimization (SEO)
 export const metadata = {
-  title: 'Delicious various meals',
-  description:'A page that displays all shared meals from different african countries'
+  title: 'Delicious various meals from Africa | Foodies',
+  description:'Discover delicious African recipes, traditional Nigerian meals, soups, rice dishes and more.',
+  alternates:{
+    canonical: "/meals"
+  },
+  openGraph:{
+    title: "Explore African Meals",
+    description: "Discover Authentic African Meals' Recipes for your favorite food",
+    url: "/meals",
+    image:["/images/pattern.jpg"]
+  }
 }
+
+ // Search Engine Optimization (SEO)
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "/",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Meals",
+      item: "/meals",
+    },
+  ],
+};
 
 async function Meals(){
   const mealData = await getMeals(1, 5)
   return<MealGrid mealData={mealData}/>
 }
-
+ 
 export default function MealsPage(){
  
   return<>
+          <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbLd)}}/>
           <header className="m-5">
             <h1 className="text-white font-extrabold text-xl md:text-3xl xl:text-5xl mx-5 mt-35 lg:mt-60 md:mb-4 xl:mb-6 mb-2" data-aos='fade-right'
                                            data-aos-offset='200'
@@ -38,7 +68,7 @@ export default function MealsPage(){
               data-aos-delay='400'
               data-aos-duration='1000'
               data-aos-easing='ease-in-out' className="relative z-10">
-            <ShareForm/>
+              <ShareForm/>
             </div> 
           </header>
           <Suspense fallback={<div className="flex justify-center">
@@ -47,4 +77,4 @@ export default function MealsPage(){
              <Meals/>
           </Suspense>
         </>
-      }
+}

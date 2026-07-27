@@ -12,8 +12,24 @@ export default function MealReturnValue({meal, imageUrl, mealInstructions, userI
   const [isdeleted, setIsdeleted] = useState(false)
   const [isedited, setIsedited] = useState(false)
   const para = meal.id
+
+  // Search Engine Optimization (SEO)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: meal.title,
+    description: meal.summary,
+    image: meal.image,
+    author: {
+      "@type": "Person",
+      name:  meal.userName
+    },
+    datePublished: meal.createdAt,
+    recipecookinginstructions: meal.instructions
+  }
   
   return<>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}/>
     {isedited ? <EditMeal meal={meal} setIsedited={setIsedited}/> : <>
       <header className="flex flex-col md:flex-row  my-4 md:my-6 xl:my-10">
         <Link href={'/meals'} className="absolute top-38 lg:top-42 lg:left-12 md:top-32 left-10 cursor-pointer z-10">

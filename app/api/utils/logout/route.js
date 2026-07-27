@@ -28,6 +28,6 @@ export async function POST() {
       secure: process.env.NODE_ENV === "production",
       expires: new Date(0)
     })
-    return NextResponse.json({message:'User logged out'}, {status:200});
+    return NextResponse.json({message:'You are successfully logged out'}, {status:200});
   }
 }
